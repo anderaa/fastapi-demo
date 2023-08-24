@@ -1,0 +1,9 @@
+services:
+  fastapi-app:
+    build: .
+    ports:
+      - "8000:8000"
+    image: fastapi-app:latest
+
+# docker-compose up --build
+# docker-compose down
