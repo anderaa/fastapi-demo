@@ -2,7 +2,7 @@
 # Build docker image and push to ECR
 
 ```
-cd ~/Projects/terraform-demo
+cd ~/Projects/fastapi-demo
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 806152608109.dkr.ecr.us-east-1.amazonaws.com
 ```
 
@@ -26,7 +26,7 @@ terraform apply
 
 Push the image to ECR:
 ```
-cd ~/Projects/terraform-demo 
+cd ~/Projects/fastapi-demo 
 docker build --platform=linux/amd64 -t fastapi-app:latest .
 docker tag fastapi-app:latest 806152608109.dkr.ecr.us-east-1.amazonaws.com/my-fastapi-app:latest
 docker push 806152608109.dkr.ecr.us-east-1.amazonaws.com/my-fastapi-app:latest
