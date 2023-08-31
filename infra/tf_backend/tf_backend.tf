@@ -5,8 +5,8 @@ terraform {
   ## TO SWITCH FROM LOCAL BACKEND TO REMOTE AWS BACKEND
   #############################################################
   backend "s3" {
-    bucket         = "tf-state-aaron"
-    key            = "fastapi-demo/tf-backend/terraform.tfstate"
+    bucket         = "tf-state-fastapi-demo"
+    key            = "tf_backend/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-state-locking"
     encrypt        = true
@@ -26,7 +26,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket        = "tf-state-aaron"
+  bucket        = "tf-state-fastapi-demo"
   force_destroy = true
 }
 
