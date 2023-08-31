@@ -8,7 +8,7 @@ terraform {
     bucket         = "tf-state-fastapi-demo"
     key            = "tf_backend/terraform.tfstate"
     region         = "us-east-1"
-    dynamodb_table = "terraform-state-locking"
+    dynamodb_table = "terraform-state-locking-fastapi-demo"
     encrypt        = true
   }
   #############################################################
@@ -47,7 +47,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_c
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
-  name         = "terraform-state-locking"
+  name         = "terraform-state-locking-fastapi-demo"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"  # this is required
   attribute {
