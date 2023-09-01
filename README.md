@@ -1,5 +1,5 @@
 
-Build docker image and push to ECR
+# Build docker image and push to ECR
 
 ```
 cd ~/Projects/fastapi-demo

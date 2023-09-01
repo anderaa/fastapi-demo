@@ -3,7 +3,7 @@ terraform {
       bucket         = "tf-state-fastapi-demo"
       key            = "web/terraform.tfstate"
       region         = "us-east-1"
-      dynamodb_table = "terraform-state-locking"
+      dynamodb_table = "terraform-state-locking-fastapi-demo"
       encrypt        = true
     }
 
@@ -79,7 +79,7 @@ resource "aws_security_group" "instance_sg" {
 
 ##### ECR ACCESS FROM EC2
 resource "aws_iam_policy" "ecr_pull_policy" {
-  name = "ECR-Pull-Policy"
+  name = "ECR-Pull-Policy-Fast"
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -99,7 +99,7 @@ resource "aws_iam_policy" "ecr_pull_policy" {
 }
 
 resource "aws_iam_role" "ecr_role" {
-  name = "ECR-Role"
+  name = "ECR-Role-Fast"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -121,7 +121,7 @@ resource "aws_iam_role_policy_attachment" "ecr_role_policy_attachment" {
 }
 
 resource "aws_iam_instance_profile" "ecr_instance_profile" {
-  name = "ECR-Instance-Profile"
+  name = "ECR-Instance-Profile-Fast"
   role = aws_iam_role.ecr_role.name
 }
 
@@ -130,7 +130,7 @@ resource "aws_iam_instance_profile" "ecr_instance_profile" {
 resource "aws_instance" "web_instance" {
   ami           = "ami-08a52ddb321b32a8c"
   instance_type = "t2.micro"
-  key_name      = "aaron-demo"
+  key_name      = "aaron-aws"
   subnet_id     = aws_subnet.my_subnet.id
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.instance_sg.id]
@@ -147,8 +147,11 @@ resource "aws_instance" "web_instance" {
     docker pull 806152608109.dkr.ecr.us-east-1.amazonaws.com/my-fastapi-app:latest
     docker run -d -p 8000:8000 806152608109.dkr.ecr.us-east-1.amazonaws.com/my-fastapi-app:latest
   EOF
+}
 
 
+output "instance_public_ip" {
+  value = aws_instance.web_instance.public_ip
 }
 
 
