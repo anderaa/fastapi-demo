@@ -11,5 +11,5 @@ def test_root_endpoint():
     assert response.status_code == 200
     assert response.json() == {"message": "Hello World!!!"}
 
-def another_test():
+def test_another():
     assert False
