@@ -12,4 +12,4 @@ def test_root_endpoint():
     assert response.json() == {"message": "Hello World!!!"}
 
 def another_test():
-    assert True
+    assert False
