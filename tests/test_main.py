@@ -10,3 +10,6 @@ def test_root_endpoint():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Hello World!!!"}
+
+def test_another():
+    assert True
