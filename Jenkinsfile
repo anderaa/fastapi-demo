@@ -1,5 +1,5 @@
 pipeline {
-    agent{
+    agent {
         docker {
             image 'my-docker-agent'
         }
