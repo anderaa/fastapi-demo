@@ -26,25 +26,56 @@ pipeline {
     post {
         success {
             script {
-                def github = getGitHub()
+                def githubToken = credentials('6609c088-0b63-4458-afc4-8d4efc530cf8') 
                 def commitSha = currentBuild().getEnvironment(env).CHANGE_ID
                 def targetUrl = currentBuild().getAbsoluteUrl()
                 def context = 'Jenkins CI'
 
-                // Set the build status to success
-                github.createCommitStatus(env.GITHUB_REPO, commitSha, "SUCCESS", context, "Build is successful", targetUrl)
+                def status = 'success'
+                def description = 'Build is successful'
+
+                // Update GitHub commit status
+                updateGitHubCommitStatus(githubToken, commitSha, status, context, description, targetUrl)
             }
         }
         failure {
             script {
-                def github = getGitHub()
+                def githubToken = credentials('6609c088-0b63-4458-afc4-8d4efc530cf8	')
                 def commitSha = currentBuild().getEnvironment(env).CHANGE_ID
                 def targetUrl = currentBuild().getAbsoluteUrl()
                 def context = 'Jenkins CI'
 
-                // Set the build status to failure
-                github.createCommitStatus(env.GITHUB_REPO, commitSha, "FAILURE", context, "Build failed", targetUrl)
+                def status = 'failure'
+                def description = 'Build failed'
+
+                // Update GitHub commit status
+                updateGitHubCommitStatus(githubToken, commitSha, status, context, description, targetUrl)
             }
         }
+    }
+}
+
+
+def updateGitHubCommitStatus(token, commitSha, status, context, description, targetUrl) {
+    def apiUrl = "https://api.github.com/repos/${env.GITHUB_REPO}/statuses/${commitSha}"
+
+    def payload = [
+        state: status,
+        target_url: targetUrl,
+        description: description,
+        context: context
+    ]
+
+    def response = httpRequest(
+        acceptType: 'APPLICATION_JSON',
+        contentType: 'APPLICATION_JSON',
+        httpMode: 'POST',
+        url: apiUrl,
+        authentication: token,
+        requestBody: groovy.json.JsonOutput.toJson(payload)
+    )
+
+    if (response.status != 201) {
+        error("Failed to update GitHub commit status: ${response.status} ${response.responseMessage}")
     }
 }
